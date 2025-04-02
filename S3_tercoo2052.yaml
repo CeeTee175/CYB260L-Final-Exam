@@ -1,0 +1,44 @@
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: "us-east-1a"
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: 20
+            VolumeType: "gp2"
+      CpuOptions:
+        CoreCount: 2
+        ThreadsPerCore: 1
+      CreditSpecification:
+        CpuCredits: "unlimited"
+      DisableApiTermination: false
+      EbsOptimized: false
+      ImageId: "ami-xxxxxxxxxx"
+      InstanceType: "t2.micro"
+      Ipv6AddressCount: 1
+      Ipv6Addresses:
+        - Ipv6Address: "your:ipv6:address"
+      KeyName: "your-keypair"
+      Monitoring: true
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: true
+          DeviceIndex: 0
+          SubnetId: "subnet-xxxxxxxxxx"
+          SecurityGroupIds:
+            - "sg-xxxxxxxxxx"
+      Tags:
+        - Key: "Name"
+          Value: "Web"
+        - Key: "Environment"
+          Value: "Production"
+      UserData: |
+        #!/bin/bash
+        echo "Hello, World" > /var/www/html/index.html
+      Volumes:
+        - DeviceName: "/dev/sdf"
+          Ebs:
+            VolumeSize: 50
+            VolumeType: "gp2"
+            DeleteOnTermination: true
