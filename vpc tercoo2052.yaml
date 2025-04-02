@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS CloudFormation Template for creating a VPC in US-West-2 region with Public and Private Subnets
+
+Resources:
+  # Creating the VPC
+  MyVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "10.0.0.0/16" # CIDR block for the VPC
+      EnableDnsSupport: true # Enable DNS support for instances in the VPC
+      EnableDnsHostnames: true # Enable DNS hostnames for instances in the VPC
+      InstanceTenancy: default # Default instance tenancy (shared hardware)
+      Tags:
+        - Key: Name
+          Value: "VPC-tercoo2052" # VPC Name with student ID
+
+  # Creating Public Subnet 1 in Availability Zone us-west-2a
+  MyPublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: "10.0.1.0/24" # CIDR block for Public Subnet 1
+      AvailabilityZone: "us-west-2a" # Availability Zone for this subnet
+      MapPublicIpOnLaunch: true # Automatically assign public IPs to instances in this subnet
+      Tags:
+        - Key: Name
+          Value: "PublicSubnet1-tercoo2052" # Name for Public Subnet 1
+
+  # Creating Public Subnet 2 in Availability Zone us-west-2b
+  MyPublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: "10.0.2.0/24" # CIDR block for Public Subnet 2
+      AvailabilityZone: "us-west-2b" # Availability Zone for this subnet
+      MapPublicIpOnLaunch: true # Automatically assign public IPs to instances in this subnet
+      Tags:
+        - Key: Name
+          Value: "PublicSubnet2-tercoo2052" # Name for Public Subnet 2
+
+  # Creating Private Subnet 1 in Availability Zone us-west-2a
+  MyPrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: "10.0.3.0/24" # CIDR block for Private Subnet 1
+      AvailabilityZone: "us-west-2a" # Availability Zone for this subnet
+      MapPublicIpOnLaunch: false # No public IPs for instances in this subnet
+      Tags:
+        - Key: Name
+          Value: "PrivateSubnet1-tercoo2052" # Name for Private Subnet 1
+
+  # Creating Private Subnet 2 in Availability Zone us-west-2b
+  MyPrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref MyVPC
+      CidrBlock: "10.0.4.0/24" # CIDR block for Private Subnet 2
+      AvailabilityZone: "us-west-2b" # Availability Zone for this subnet
+      MapPublicIpOnLaunch: false # No public IPs for instances in this subnet
+      Tags:
+        - Key: Name
+          Value: "PrivateSubnet2-tercoo2052" # Name for Private Subnet 2
+
+Outputs:
+  # Output the VPC ID
+  VPCID:
+    Description: VPC ID created in AWS CloudFormation
+    Value: !Ref MyVPC
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCID" # Exporting the VPC ID for use in other stacks
